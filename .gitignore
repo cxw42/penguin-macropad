@@ -1,0 +1,16 @@
+foo*
+*.sw[op]
+*~
+~*
+/RCS/
+*.bak
+*.old
+*.tdy
+
+# ctags/gtags
+tags
+GPATH
+GRTAGS
+GTAGS
+cscope.out
+ID
