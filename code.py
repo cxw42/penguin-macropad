@@ -11,6 +11,7 @@ import time
 import board
 
 import keypad
+import neopixel
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
@@ -42,6 +43,9 @@ def main():
     )
 
     keyboard = Keyboard(usb_hid.devices)
+
+    led = neopixel.NeoPixel(board.NEOPIXEL, 1)
+    led.fill((0,0,0))
 
     while True:
         event = km.events.get()
