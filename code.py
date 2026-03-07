@@ -11,7 +11,6 @@ import time
 import board
 
 import keypad
-import neopixel
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
@@ -21,12 +20,15 @@ key_number_to_keycode = [
     None,
     Keycode.B,    # R1C2
     Keycode.C,    # R1C3
+
     Keycode.A,    # R1C1
     None,
     None,
+
     Keycode.D,    # R2C1
     Keycode.E,    # R2C2
     Keycode.F,    # R2C3
+
     Keycode.G,    # R3C1
     Keycode.H,    # R3C2
     Keycode.I,    # R3C3
@@ -44,9 +46,6 @@ def main():
 
     keyboard = Keyboard(usb_hid.devices)
 
-    led = neopixel.NeoPixel(board.NEOPIXEL, 1)
-    led.fill((0,0,0))
-
     while True:
         event = km.events.get()
         if not event:
@@ -61,8 +60,9 @@ def main():
         try:
             if event.pressed:
                 keyboard.press(keycode)
-            else:
                 keyboard.release(keycode)
+            else:
+                pass # keyboard.release(keycode)
         except ValueError:
             # > 6 keys concurrently
             keyboard.release_all()
