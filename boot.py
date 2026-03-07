@@ -10,18 +10,14 @@ import neopixel
 import storage
 import time
 
-def print_pin(pin, pullup):
-    with digitalio.DigitalInOut(pin) as the_pin:
-        the_pin.switch_to_input(pull=digitalio.Pull.UP if pullup else digitalio.Pull.DOWN)
-        print(pin, "up" if pullup else "down", the_pin.value)
-
 print("boot.py running")
+
+# Check whether R1C1 is held down (programming mode)
+is_r1c1_pressed = False
 
 col_pin_id = board.A2
 row_pin_id = board.D1
 
-# Check whether R1C1 is held down
-is_r1c1_pressed = False
 with digitalio.DigitalInOut(col_pin_id) as col_pin:
     col_pin.switch_to_input(pull=digitalio.Pull.UP) # pull up the column (anode)
     with digitalio.DigitalInOut(row_pin_id) as row_pin:
@@ -29,15 +25,6 @@ with digitalio.DigitalInOut(col_pin_id) as col_pin:
         is_r1c1_pressed = not col_pin.value
 
 led = neopixel.NeoPixel(board.NEOPIXEL, 1)
-for i in range(0):
-    led.fill((1,0,0))
-    time.sleep(0.75)
-    led.fill((0,1,0))
-    time.sleep(0.75)
-
-#for pin in (board.D9, board.D1, board.D4, board.A3, board.A2, board.A1, board.A0):
-#    print_pin(pin, True)
-#    print_pin(pin, False)
 
 if is_r1c1_pressed:
     # Programming mode
@@ -45,5 +32,5 @@ if is_r1c1_pressed:
 
 else:
     # Normal mode --- keypad only
-    #storage.disable_usb_drive()
+    storage.disable_usb_drive()
     led.fill((1,1,0))

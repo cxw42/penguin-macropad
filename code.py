@@ -37,7 +37,7 @@ key_number_to_keycode = [
 def main():
     print("Hello, world!")
 
-	# Initialize
+    # Initialize
     km = keypad.KeyMatrix(
         row_pins=(board.D9, board.D1, board.D4, board.A3),
         column_pins=(board.A2, board.A1, board.A0),
