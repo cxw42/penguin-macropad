@@ -16,6 +16,8 @@ Don't use a matrix if you have enough pins for direct wiring! :)
 
 ## Construction log
 
+(Sorry the pictures are a bit blurry!)
+
 Start with a base.  I used the base I got with a keyswitch tester
 from [Clackify](https://clackify.com/products/tester-base).
 
