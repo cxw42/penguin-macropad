@@ -15,23 +15,35 @@ import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 
+def backslash_underscore(keyboard, pressed):
+    if not pressed:
+        return
+    keyboard.release(Keycode.LEFT_SHIFT)
+    keyboard.press(Keycode.BACKSLASH)
+    keyboard.release(Keycode.BACKSLASH)
+    keyboard.press(Keycode.LEFT_SHIFT)
+    keyboard.press(Keycode.MINUS)
+    keyboard.release(Keycode.MINUS)
+    keyboard.release(Keycode.LEFT_SHIFT)
+
 # Keymap.  I had to split row 1 into two row pins because of space constraints.
+# List of callable|iterable.
 key_number_to_keycode = [
     None,
-    Keycode.B,    # R1C2
-    Keycode.C,    # R1C3
+    backslash_underscore,    # R1C2
+    (Keycode.C,),    # R1C3
 
-    Keycode.A,    # R1C1
+    (Keycode.BACKSLASH, Keycode.MINUS),    # R1C1
     None,
     None,
 
-    Keycode.D,    # R2C1
-    Keycode.E,    # R2C2
-    Keycode.F,    # R2C3
+    (Keycode.D,),    # R2C1
+    (Keycode.E,),    # R2C2
+    (Keycode.F,),    # R2C3
 
-    Keycode.G,    # R3C1
-    Keycode.H,    # R3C2
-    Keycode.I,    # R3C3
+    (Keycode.G,),    # R3C1
+    (Keycode.H,),    # R3C2
+    (Keycode.I,),    # R3C3
 ]
 
 def main():
@@ -51,21 +63,31 @@ def main():
         if not event:
             continue
 
-        keycode = key_number_to_keycode[event.key_number]
-        if not keycode:
+        keycodes = key_number_to_keycode[event.key_number]
+        if not keycodes:
             continue
 
         # Handle the event
-        print(keycode, event.pressed)
         try:
-            if event.pressed:
-                keyboard.press(keycode)
-                keyboard.release(keycode)
-            else:
-                pass # keyboard.release(keycode)
-        except ValueError:
-            # > 6 keys concurrently
-            keyboard.release_all()
+            keycodes(keyboard, event.pressed)
+            print("handled via function")
+            continue
+        except TypeError as exc:
+            print("not callable?", exc)
+            pass    # not callable
+
+        for keycode in keycodes:
+            print(keycode, event.pressed)
+            try:
+                # Not callable --- iterable of keycodes
+                if event.pressed:
+                    keyboard.press(keycode)
+                    keyboard.release(keycode)
+                else:
+                    pass # keyboard.release(keycode)
+            except ValueError:
+                # > 6 keys concurrently
+                keyboard.release_all()
 
         time.sleep(0.005)    # ~200 Hz
 
