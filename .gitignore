@@ -14,3 +14,6 @@ GRTAGS
 GTAGS
 cscope.out
 ID
+
+# python
+.tox/
