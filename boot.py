@@ -10,6 +10,7 @@ import board
 import digitalio
 import neopixel
 import storage
+import usb_cdc
 
 print("boot.py running")
 
@@ -35,3 +36,4 @@ else:
     # Normal mode --- keypad only
     storage.disable_usb_drive()
     led.fill((1, 1, 0))
+    usb_cdc.disable()
