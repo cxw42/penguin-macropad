@@ -59,9 +59,13 @@ def main():
     keyboard = Keyboard(usb_hid.devices)
 
     while True:
+        time.sleep(0.005)  # ~200 Hz
+
         event = km.events.get()
         if not event:
             continue
+
+        print(event.key_number, event.pressed)
 
         keycodes = key_number_to_keycode[event.key_number]
         if not keycodes:
@@ -70,26 +74,25 @@ def main():
         # Handle the event
         try:
             keycodes(keyboard, event.pressed)
-            print("handled via function")
-            continue
+            continue  # handled via function
         except TypeError as exc:
-            print("not callable?", exc)
-            pass  # not callable
+            pass  # not callable --- assume it's iterable
+        except ValueError:
+            # > 6 keys concurrently
+            keyboard.release_all()
+            continue
 
         for keycode in keycodes:
-            print(keycode, event.pressed)
             try:
                 # Not callable --- iterable of keycodes
                 if event.pressed:
                     keyboard.press(keycode)
                     keyboard.release(keycode)
                 else:
-                    pass  # keyboard.release(keycode)
+                    pass
             except ValueError:
                 # > 6 keys concurrently
                 keyboard.release_all()
-
-        time.sleep(0.005)  # ~200 Hz
 
 
 if __name__ == "__main__":
