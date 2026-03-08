@@ -35,5 +35,5 @@ if is_r1c1_pressed:
 else:
     # Normal mode --- keypad only
     storage.disable_usb_drive()
-    led.fill((1, 1, 0))
     usb_cdc.disable()
+    led.fill((0, 1, 0))
