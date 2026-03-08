@@ -8,12 +8,13 @@
 # SPDX-License-Identifier: MIT
 
 import time
-import board
 
+import board
 import keypad
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
+
 
 def backslash_underscore(keyboard, pressed):
     if not pressed:
@@ -26,25 +27,24 @@ def backslash_underscore(keyboard, pressed):
     keyboard.release(Keycode.MINUS)
     keyboard.release(Keycode.LEFT_SHIFT)
 
+
 # Keymap.  I had to split row 1 into two row pins because of space constraints.
 # List of callable|iterable.
 key_number_to_keycode = [
     None,
-    backslash_underscore,    # R1C2
-    (Keycode.C,),    # R1C3
-
-    (Keycode.BACKSLASH, Keycode.MINUS),    # R1C1
+    backslash_underscore,  # R1C2
+    (Keycode.C,),  # R1C3
+    (Keycode.BACKSLASH, Keycode.MINUS),  # R1C1
     None,
     None,
-
-    (Keycode.D,),    # R2C1
-    (Keycode.E,),    # R2C2
-    (Keycode.F,),    # R2C3
-
-    (Keycode.G,),    # R3C1
-    (Keycode.H,),    # R3C2
-    (Keycode.I,),    # R3C3
+    (Keycode.D,),  # R2C1
+    (Keycode.E,),  # R2C2
+    (Keycode.F,),  # R2C3
+    (Keycode.G,),  # R3C1
+    (Keycode.H,),  # R3C2
+    (Keycode.I,),  # R3C3
 ]
+
 
 def main():
     print("Hello, world!")
@@ -74,7 +74,7 @@ def main():
             continue
         except TypeError as exc:
             print("not callable?", exc)
-            pass    # not callable
+            pass  # not callable
 
         for keycode in keycodes:
             print(keycode, event.pressed)
@@ -84,12 +84,13 @@ def main():
                     keyboard.press(keycode)
                     keyboard.release(keycode)
                 else:
-                    pass # keyboard.release(keycode)
+                    pass  # keyboard.release(keycode)
             except ValueError:
                 # > 6 keys concurrently
                 keyboard.release_all()
 
-        time.sleep(0.005)    # ~200 Hz
+        time.sleep(0.005)  # ~200 Hz
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
