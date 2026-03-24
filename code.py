@@ -28,6 +28,14 @@ def backslash_underscore(keyboard, pressed):
     keyboard.release(Keycode.LEFT_SHIFT)
 
 
+def push_nl(keyboard, pressed):
+    if not pressed:
+        return
+    for key in (Keycode.P, Keycode.U, Keycode.S, Keycode.H, Keycode.ENTER):
+        keyboard.press(key)
+        keyboard.release(key)
+
+
 # Keymap.  I had to split row 1 into two row pins because of space constraints.
 # List of callable|iterable.
 key_number_to_keycode = [
@@ -42,7 +50,7 @@ key_number_to_keycode = [
     (Keycode.F,),  # R2C3
     (Keycode.G,),  # R3C1
     (Keycode.H,),  # R3C2
-    (Keycode.I,),  # R3C3
+    push_nl,  # R3C3
 ]
 
 
